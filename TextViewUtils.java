@@ -15,13 +15,13 @@ public class TextViewUtils extends AppCompatTextView {
 	private boolean mIsFitting = true;
 	private boolean mAlreadyCheck = false;
 
-	protected TextViewFittingInterface mCallback;
+	protected TextViewUtilsInterface mCallback;
 
-	public interface TextViewFittingInterface {
+	public interface TextViewUtilsInterface {
 		void onGetEffectiveLineCount(int effectiveLineCount);
 	}
 	
-	public void setOnViewReady(TextViewFittingInterface callback) {
+	public void setOnViewReady(TextViewUtilsInterface callback) {
 		mCallback = callback;
 	}
 
