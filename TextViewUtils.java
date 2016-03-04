@@ -15,6 +15,16 @@ public class TextViewUtils extends AppCompatTextView {
 	private boolean mIsFitting = true;
 	private boolean mAlreadyCheck = false;
 
+	protected TextViewFittingInterface mCallback;
+
+	public interface TextViewFittingInterface {
+		void onGetEffectiveLineCount(int effectiveLineCount);
+	}
+	
+	public void setOnViewReady(TextViewFittingInterface callback) {
+		mCallback = callback;
+	}
+
 	public TextViewUtils(Context context) {
 		super(context);
 	}
@@ -44,6 +54,12 @@ public class TextViewUtils extends AppCompatTextView {
 //		}
 	}
 
+	@Override
+	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+		super.onLayout(changed, left, top, right, bottom);
+		checkLines();
+	}
+	
 	private void checkLines() {
 		final int lineCount = this.getLayout().getLineCount();
 		final int lineEffectiveCount = this.getEffectiveLineCountTextView();
@@ -53,6 +69,10 @@ public class TextViewUtils extends AppCompatTextView {
 			Log.i(TAG, "lineEffectiveCount " + lineEffectiveCount);
 			mIsFitting = false;
 			this.setMaxLines(lineEffectiveCount);
+		}
+		if (mCallback != null && lineEffectiveCount != 0 && !mAlreadyCheck) {
+			mAlreadyCheck = true;
+			mCallback.onGetEffectiveLineCount(lineEffectiveCount);
 		}
 	}
 
